@@ -35,10 +35,16 @@ export interface Highlight {
   };
 }
 
+export interface Experience {
+  readonly period: string;
+  readonly company: string;
+  readonly role?: string;
+  readonly description: string;
+}
+
 export interface Profile {
   readonly name: string;
   readonly title: string;
-  readonly tagline: string;
   readonly avatarUrl?: string;
   readonly socials: readonly SocialLink[];
   readonly summary: readonly string[];
@@ -46,6 +52,7 @@ export interface Profile {
   readonly stacks: TechStack;
   readonly interests: Interests;
   readonly highlights: readonly Highlight[];
+  readonly experience?: readonly Experience[];
   readonly workStyle: {
     readonly can: readonly string[];
     readonly cannot?: readonly string[];
@@ -74,7 +81,6 @@ export interface Profile {
 export const PROFILE: Profile = {
   name: "Yuki Masaki",
   title: "Webアプリケーションエンジニア",
-  tagline: "関数型プログラミングとクリーンアーキテクチャで価値を創造する",
   avatarUrl: undefined,
   socials: [
     { label: "GitHub", url: "https://github.com/ftsmasaki", icon: "github" },
@@ -159,6 +165,26 @@ export const PROFILE: Profile = {
         href: "/blog",
         label: "ブログを見る",
       },
+    },
+  ],
+  experience: [
+    {
+      period: "2020年10月",
+      company: "株式会社エフトスに入社",
+      role: "サポートエンジニア",
+      description: "PCやサーバーのキッティング、顧客サポートに従事",
+    },
+    {
+      period: "2025年6月",
+      company: "株式会社エフトス",
+      description:
+        "同社開発部門に異動。GAS、Webアプリケーションの設計・開発に従事",
+    },
+    {
+      period: "現在",
+      company: "株式会社エフトス",
+      description:
+        "AIを活用した仕様駆動開発、関数型ドメインモデリングによる保守性の高いコーディングを実践中",
     },
   ],
   workStyle: {

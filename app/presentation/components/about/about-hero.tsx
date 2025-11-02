@@ -62,13 +62,12 @@ export function AboutHero() {
           </div>
         )}
 
-        {/* 名前・肩書・タグライン */}
+        {/* 名前・肩書 */}
         <div className="flex flex-1 flex-col gap-2">
           <h1 className="text-3xl font-bold leading-tight sm:text-4xl">
             {PROFILE.name}
           </h1>
           <p className="text-lg text-muted-foreground">{PROFILE.title}</p>
-          <p className="text-base text-muted-foreground">{PROFILE.tagline}</p>
 
           {/* SNSリンク */}
           <div className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start">
