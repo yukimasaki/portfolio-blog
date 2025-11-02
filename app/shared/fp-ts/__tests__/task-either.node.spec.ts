@@ -75,7 +75,7 @@ describe("task-either", () => {
 
     it("Rightの場合で、flatMapの結果がLeftの場合はLeftを返す", async () => {
       const right = TE.right(21);
-      const toError = (_x: number): TE.TaskEither<AppError, never> =>
+      const toError = (): TE.TaskEither<AppError, never> =>
         TE.left({
           _tag: "ValidationError",
           field: "test",

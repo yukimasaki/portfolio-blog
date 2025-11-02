@@ -83,7 +83,7 @@ describe("either", () => {
 
     it("Rightの場合で、flatMapの結果がLeftの場合はLeftを返す", () => {
       const right = E.right(21);
-      const toError = (_x: number) => E.left("error");
+      const toError = () => E.left("error");
       const result = flatMap(toError)(right);
       expect(result).toEqual(E.left("error"));
     });

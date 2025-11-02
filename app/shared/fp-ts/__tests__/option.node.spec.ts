@@ -85,7 +85,7 @@ describe("option", () => {
 
     it("Someの場合で、flatMapの結果がNoneの場合はNoneを返す", () => {
       const someValue = O.some(21);
-      const toNone = (_x: number) => O.none;
+      const toNone = () => O.none;
       const result = flatMap(toNone)(someValue);
       expect(result).toEqual(O.none);
     });

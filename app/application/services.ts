@@ -18,11 +18,11 @@ export const extractRelatedPosts = (
 ): Post[] => {
   return pipe(
     allPosts,
-    A.filter(post => post.id !== targetPost.id),
+    A.filter(post => post.id.value !== targetPost.id.value),
     A.filter(post => {
-      const targetTags = targetPost.tags.map(t => t.id);
-      const postTags = post.tags.map(t => t.id);
-      return targetTags.some(tag => postTags.includes(tag));
+      const targetTagIds = targetPost.tags.map(t => t.id.value);
+      const postTagIds = post.tags.map(t => t.id.value);
+      return targetTagIds.some(tagId => postTagIds.includes(tagId));
     }),
     A.takeLeft(maxCount)
   );
