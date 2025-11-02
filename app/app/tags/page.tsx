@@ -26,10 +26,13 @@ export default async function TagsPage() {
 
   const tags: Tag[] = tagsResult.right;
 
+  // 投稿数が0のタグを除外
+  const tagsWithPosts = tags.filter(tag => tag.count.value > 0);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">タグ一覧</h1>
-      <TagList tags={tags} />
+      <TagList tags={tagsWithPosts} />
       <div className="mt-10">
         <Link href="/blog" className="text-sm text-primary hover:underline">
           ブログ一覧へ戻る

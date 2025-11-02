@@ -16,7 +16,10 @@ export const TagList = ({
   showCount = true,
   link = true,
 }: TagListProps) => {
-  if (tags.length === 0) {
+  // 投稿数が0のタグを除外
+  const tagsWithPosts = tags.filter(tag => tag.count.value > 0);
+
+  if (tagsWithPosts.length === 0) {
     return (
       <div className={className}>
         {title && <h2 className="text-xl font-semibold mb-4">{title}</h2>}
@@ -25,7 +28,7 @@ export const TagList = ({
     );
   }
 
-  const sorted = [...tags].sort((a, b) => b.count.value - a.count.value);
+  const sorted = [...tagsWithPosts].sort((a, b) => b.count.value - a.count.value);
 
   return (
     <div className={className}>

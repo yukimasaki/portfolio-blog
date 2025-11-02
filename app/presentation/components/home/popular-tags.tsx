@@ -9,8 +9,9 @@ interface PopularTagsProps {
  * トップページの人気タグセクションコンポーネント
  */
 export function PopularTags({ tags }: PopularTagsProps) {
-  // 人気タグを取得（使用回数でソート、上位10件）
+  // 投稿数が0のタグを除外してから、人気タグを取得（使用回数でソート、上位10件）
   const popularTags = [...tags]
+    .filter(tag => tag.count.value > 0)
     .sort((a, b) => b.count.value - a.count.value)
     .slice(0, 10);
 

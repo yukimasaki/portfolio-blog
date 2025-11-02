@@ -61,8 +61,9 @@ export default async function BlogPage() {
     })),
   });
 
-  // よく使われるタグを取得（使用回数でソート、上位10件）
+  // 投稿数が0のタグを除外してから、よく使われるタグを取得（使用回数でソート、上位10件）
   const popularTags = [...tags]
+    .filter(tag => tag.count.value > 0)
     .sort((a, b) => b.count.value - a.count.value)
     .slice(0, 10);
 
