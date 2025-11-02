@@ -95,11 +95,11 @@ export const httpClient = {
         const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
         const response = await fetch(url, {
+          ...options,
           method: "POST",
           headers: { "Content-Type": "application/json", ...options?.headers },
           body: JSON.stringify(body),
           signal: controller.signal,
-          ...options,
         });
 
         clearTimeout(timeoutId);
