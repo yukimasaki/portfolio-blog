@@ -1,10 +1,6 @@
 import { describe, it, expect } from "vitest";
 import * as E from "fp-ts/Either";
-import {
-  createImageUrl,
-  createGitHubUrl,
-  createLiveUrl,
-} from "../common";
+import { createImageUrl, createGitHubUrl, createLiveUrl } from "../common";
 
 const isRight = E.isRight;
 const isLeft = E.isLeft;
@@ -28,7 +24,9 @@ describe("value-objects/common", () => {
     });
 
     it("完全なURLは成功する", () => {
-      const result = createImageUrl("https://example.com/path/to/image.jpg?query=value#fragment");
+      const result = createImageUrl(
+        "https://example.com/path/to/image.jpg?query=value#fragment"
+      );
       expect(isRight(result)).toBe(true);
     });
 
@@ -36,7 +34,9 @@ describe("value-objects/common", () => {
       const result = createImageUrl("/image.jpg");
       expect(isLeft(result)).toBe(true);
       if (isLeft(result)) {
-        expect(result.left).toBe("無効なImageUrl: 有効なURLである必要があります");
+        expect(result.left).toBe(
+          "無効なImageUrl: 有効なURLである必要があります"
+        );
       }
     });
 
@@ -49,7 +49,9 @@ describe("value-objects/common", () => {
       const result = createImageUrl("");
       expect(isLeft(result)).toBe(true);
       if (isLeft(result)) {
-        expect(result.left).toBe("無効なImageUrl: 空でない文字列である必要があります");
+        expect(result.left).toBe(
+          "無効なImageUrl: 空でない文字列である必要があります"
+        );
       }
     });
 
@@ -140,7 +142,9 @@ describe("value-objects/common", () => {
     });
 
     it("完全なURLは成功する", () => {
-      const result = createLiveUrl("https://example.com/path?query=value#fragment");
+      const result = createLiveUrl(
+        "https://example.com/path?query=value#fragment"
+      );
       expect(isRight(result)).toBe(true);
     });
 

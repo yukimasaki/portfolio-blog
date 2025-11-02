@@ -83,7 +83,9 @@ describe("value-objects/post", () => {
       const result = createPostTitle(title);
       expect(isLeft(result)).toBe(true);
       if (isLeft(result)) {
-        expect(result.left).toBe("無効なPostTitle: 1-200文字である必要があります");
+        expect(result.left).toBe(
+          "無効なPostTitle: 1-200文字である必要があります"
+        );
       }
     });
 
@@ -118,7 +120,10 @@ describe("value-objects/post", () => {
       const result = createPostSlug("test-post-123");
       expect(isRight(result)).toBe(true);
       if (isRight(result)) {
-        expect(result.right).toEqual({ _tag: "PostSlug", value: "test-post-123" });
+        expect(result.right).toEqual({
+          _tag: "PostSlug",
+          value: "test-post-123",
+        });
       }
     });
 
@@ -213,7 +218,9 @@ describe("value-objects/post", () => {
       const result = createPostExcerpt(excerpt);
       expect(isLeft(result)).toBe(true);
       if (isLeft(result)) {
-        expect(result.left).toBe("無効なPostExcerpt: 0-500文字である必要があります");
+        expect(result.left).toBe(
+          "無効なPostExcerpt: 0-500文字である必要があります"
+        );
       }
     });
 
@@ -267,7 +274,9 @@ describe("value-objects/post", () => {
       const result = createPostDate(date);
       expect(isLeft(result)).toBe(true);
       if (isLeft(result)) {
-        expect(result.left).toBe("無効なPostDate: 有効な日付である必要があります");
+        expect(result.left).toBe(
+          "無効なPostDate: 有効な日付である必要があります"
+        );
       }
     });
 
@@ -298,7 +307,9 @@ describe("value-objects/post", () => {
       expect(isRight(result1)).toBe(true);
       expect(isRight(result2)).toBe(true);
       if (isRight(result1) && isRight(result2)) {
-        expect(result1.right.value.getTime()).toBe(result2.right.value.getTime());
+        expect(result1.right.value.getTime()).toBe(
+          result2.right.value.getTime()
+        );
       }
     });
   });
