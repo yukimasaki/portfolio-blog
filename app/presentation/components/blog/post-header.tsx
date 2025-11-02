@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { Calendar } from "lucide-react";
 import type { Post } from "@/domain/blog/entities";
 import { formatDate } from "@/presentation/utils/format";
 import { TagList } from "@/presentation/components/common/tag-list";
@@ -51,26 +52,21 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
 
       {/* 日時 */}
       <div className="mb-6">
-        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
-          <motion.time
-            layoutId={`post-date-${post.id.value}`}
-            dateTime={post.createdAt.value.toISOString()}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{
-              layout: { duration: 0.2, ease: "easeOut" },
-              opacity: { duration: 0.15, delay: 0.08 },
-            }}
-          >
-            投稿日: {formatDate(post.createdAt.value)}
-          </motion.time>
-          {post.updatedAt.value.getTime() !==
-            post.createdAt.value.getTime() && (
-            <time dateTime={post.updatedAt.value.toISOString()}>
-              更新日: {formatDate(post.updatedAt.value)}
-            </time>
-          )}
-        </div>
+        <motion.div
+          layoutId={`post-date-${post.id.value}`}
+          className="flex items-center gap-2 text-sm text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            layout: { duration: 0.2, ease: "easeOut" },
+            opacity: { duration: 0.15, delay: 0.08 },
+          }}
+        >
+          <Calendar className="w-4 h-4" aria-hidden="true" />
+          <time dateTime={post.createdAt.value.toISOString()}>
+            {formatDate(post.createdAt.value)}
+          </time>
+        </motion.div>
       </div>
 
       <div className="mb-6">
@@ -94,22 +90,6 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
           </motion.div>
         )}
       </div>
-
-      {/* 要約 */}
-      {post.excerpt.value && (
-        <motion.div
-          layoutId={`post-excerpt-${post.id.value}`}
-          className="mb-8 p-4 bg-muted rounded-lg"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            layout: { duration: 0.2, ease: "easeOut" },
-            opacity: { duration: 0.15, delay: 0.1 },
-          }}
-        >
-          <p className="text-lg">{post.excerpt.value}</p>
-        </motion.div>
-      )}
     </>
   );
 };

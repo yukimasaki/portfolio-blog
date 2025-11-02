@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect } from "react";
-import { Image as ImageIcon } from "lucide-react";
+import { Image as ImageIcon, Calendar } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -80,6 +80,7 @@ export const PostCard = ({ post }: PostCardProps) => {
               {post.title.value}
             </motion.h3>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Calendar className="w-4 h-4" aria-hidden="true" />
               <motion.time
                 layoutId={`post-date-${post.id.value}`}
                 dateTime={post.createdAt.value.toISOString()}
