@@ -59,26 +59,80 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
+    // 指定されたパスを無効化（新規追加・更新・削除時の反映に必要）
     revalidatePaths.forEach(path => {
-      revalidatePath(path);
+      revalidatePath(path, "page");
+      console.log(`Revalidated path: ${path}`);
     });
 
+    // 指定されたタグを無効化
     correctTags.forEach(tag => {
       revalidateTag(tag, "");
+      console.log(`Revalidated tag: ${tag}`);
     });
 
+    // ブログ関連のページを常に無効化
+    // 新規追加・更新・削除時に確実に反映させるため
+    // プラグインから送られてくる paths に含まれていなくても、
+    // ブログ一覧やトップページに影響がある可能性があるため
+    const alwaysRevalidatePaths = ["/blog", "/"];
+
+    // プラグインから送られてくる paths に含まれていない場合のみ追加
+    alwaysRevalidatePaths.forEach(path => {
+      if (!revalidatePaths.includes(path)) {
+        revalidatePath(path, "page");
+        console.log(`Revalidated always path: ${path}`);
+      }
+    });
+
+    // ブログ関連のタグを常に無効化
+    // 新規追加・更新・削除時に確実に反映させるため
+    const alwaysRevalidateTags = ["posts", "search-index"];
+
+    // プラグインから送られてくる tags に含まれていない場合のみ追加
+    alwaysRevalidateTags.forEach(tag => {
+      if (!correctTags.includes(tag)) {
+        revalidateTag(tag, "");
+        console.log(`Revalidated always tag: ${tag}`);
+      }
+    });
+
+    // パスに /blog/ が含まれている場合、/blog/[slug] も明示的に無効化
+    // これは新規追加・更新・削除された記事の個別ページを確実に無効化するため
+    const blogSlugPaths = revalidatePaths.filter(
+      path => path.startsWith("/blog/") && path !== "/blog"
+    );
+
+    if (blogSlugPaths.length > 0) {
+      // 各ブログ記事ページを無効化
+      // これにより、generateStaticParamsに含まれていない新規記事も動的に生成される
+      blogSlugPaths.forEach(path => {
+        revalidatePath(path, "page");
+        console.log(`Revalidated blog slug path: ${path}`);
+      });
+    }
+
+    const allRevalidatedPaths = [
+      ...revalidatePaths,
+      ...alwaysRevalidatePaths.filter(path => !revalidatePaths.includes(path)),
+    ];
+    const allRevalidatedTags = [
+      ...correctTags,
+      ...alwaysRevalidateTags.filter(tag => !correctTags.includes(tag)),
+    ];
+
     console.log(
-      `${new Date().toJSON()} - Paths and tags revalidated: ${revalidatePaths.join(
+      `${new Date().toJSON()} - Paths and tags revalidated: ${allRevalidatedPaths.join(
         ", "
-      )} and ${correctTags.join(", ")}`
+      )} and ${allRevalidatedTags.join(", ")}`
     );
 
     return new Response(
       JSON.stringify({
         revalidated: true,
-        message: `Paths and tags revalidated: ${revalidatePaths.join(
+        message: `Paths and tags revalidated: ${allRevalidatedPaths.join(
           ", "
-        )} and ${correctTags.join(", ")}`,
+        )} and ${allRevalidatedTags.join(", ")}`,
       }),
       {
         status: 200,
