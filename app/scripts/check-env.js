@@ -15,7 +15,6 @@ const nonEmptyString = z.string().min(1);
 
 const ServerEnvSchema = z.object({
   WORDPRESS_URL: nonEmptyString,
-  REVALIDATE_SECRET: z.string(),
   DEBUG_WORDPRESS_API: z.enum(["0", "1"]).optional(),
 });
 

@@ -14,37 +14,13 @@ import { Toc } from "@/presentation/components/common/toc";
 import * as React from "react";
 import { publicEnv } from "@/config/env";
 
-// ISR設定: 1時間ごとに再生成
-export const revalidate = 3600;
-
-// 動的パラメータの生成を許可
-// generateStaticParamsに含まれていない新規記事のパスも動的に生成されるようにする
-export const dynamicParams = true;
+// SSR設定: 常に動的に取得
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: Promise<{
     slug: string;
   }>;
-}
-
-/**
- * ビルド時に全ての記事のスラッグをプリフェッチ
- * generateStaticParamsで各記事ページを静的生成
- * 
- * 新規追加された記事のパスは dynamicParams = true により動的に生成される
- */
-export async function generateStaticParams() {
-  const postsResult = await getPosts()();
-
-  if (postsResult._tag === "Left") {
-    // エラー時は空配列を返して動的生成にフォールバック
-    return [];
-  }
-
-  const posts = postsResult.right;
-  return posts.map(post => ({
-    slug: post.slug.value,
-  }));
 }
 
 export async function generateMetadata({

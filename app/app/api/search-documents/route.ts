@@ -30,10 +30,7 @@ export async function GET() {
     const perPage = 100; // 調整可能。必要に応じてページネーション対応
     const url = `${baseUrl}/wp-json/wp/v2/posts?per_page=${perPage}&_embed=true`;
 
-    const res = await fetch(url, {
-      // fetchキャッシュにタグを付与し、オンデマンドISRで無効化できるようにする
-      next: { tags: ["search-index"] },
-    });
+    const res = await fetch(url);
 
     if (!res.ok) {
       return NextResponse.json(

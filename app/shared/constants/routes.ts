@@ -36,7 +36,6 @@ export const COMMON_ROUTES = {
  */
 export const API_ROUTES = {
   WEBHOOK: "/api/webhook",
-  REVALIDATE: "/api/revalidate",
   SITEMAP: "/sitemap.xml",
   ROBOTS: "/robots.txt",
 } as const;

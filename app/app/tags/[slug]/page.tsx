@@ -8,7 +8,8 @@ import type { Post } from "@/domain/blog/entities";
 import type { Tag } from "@/domain/tags/entities";
 import { PostList } from "@/presentation/components/blog/post-list";
 
-export const revalidate = 3600;
+// SSR設定: 常に動的に取得
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   readonly params: Promise<{ slug: string }>;

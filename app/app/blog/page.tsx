@@ -5,8 +5,8 @@ import type { Tag } from "@/domain/tags/entities";
 import { TagList } from "@/presentation/components/common/tag-list";
 import { debugDomainEntity } from "@/infrastructure/utils/debug";
 
-// ISR設定: 1時間ごとに再生成
-export const revalidate = 3600;
+// SSR設定: 常に動的に取得
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "ブログ",
@@ -14,7 +14,7 @@ export const metadata = {
 };
 
 export default async function BlogPage() {
-  // ビルド時にデータ取得
+  // 常に動的にデータ取得
   const postsResult = await getPosts()();
   const tagsResult = await getTags()();
 
