@@ -15,18 +15,17 @@ import type { ValidationError } from "@/application/common/errors";
 export const validateWordPressPost = (
   data: unknown
 ): E.Either<ValidationError, WordPressPost> => {
-  return pipe(
-    WordPressPostSchema.safeParse(data),
-    E.fromPredicate(
-      result => result.success,
-      (result): ValidationError => ({
-        _tag: "ValidationError",
-        field: "post",
-        message: result.success ? "" : result.error.message,
-      })
-    ),
-    E.map(result => result.data)
-  );
+  const result = WordPressPostSchema.safeParse(data);
+
+  if (result.success) {
+    return E.right(result.data);
+  }
+
+  return E.left({
+    _tag: "ValidationError",
+    field: "post",
+    message: result.error.message,
+  });
 };
 
 /**
