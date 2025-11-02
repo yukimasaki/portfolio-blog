@@ -41,7 +41,6 @@ export const PostCard = ({ post }: PostCardProps) => {
   return (
     <Link
       href={BLOG_ROUTES.POST(post.slug.value)}
-      scroll={false}
       className="block h-full"
     >
       <motion.article
