@@ -1,87 +1,103 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { headers } from "next/headers";
 import { serverEnv } from "@/config/env";
+
+/**
+ * Constants for HTTP Status codes.
+ */
+const STATUS_CODES = {
+  UNAUTHORIZED: 401,
+  PRECONDITION_FAILED: 412,
+  INTERNAL_SERVER_ERROR: 500,
+} as const;
 
 /**
  * WordPress On-Demand RevalidationプラグインからのWebhookを受信
  * 記事の追加・更新・削除時にNext.jsのキャッシュを無効化
+ *
+ * 公式ドキュメント: https://github.com/Dexerto/on-demand-revalidation
  */
-export async function POST(request: NextRequest) {
-  // セキュリティトークンの検証
-  const secret = request.headers.get("x-revalidate-secret");
-  const expectedSecret = serverEnv.REVALIDATE_SECRET;
+export async function PUT(request: NextRequest) {
+  const { paths, tags }: { paths?: string[]; tags?: string[] } =
+    await request.json();
 
-  if (secret !== expectedSecret) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  console.log("Received paths:", paths);
+  console.log("Received tags:", tags);
+
+  const headersList = await headers();
+  const authorizationHeader = headersList.get("authorization");
+
+  console.log("Authorization header:", authorizationHeader);
+
+  if (authorizationHeader !== `Bearer ${serverEnv.REVALIDATE_SECRET}`) {
+    console.error(`Invalid token: ${authorizationHeader}`);
+    return new Response(`Invalid token`, {
+      status: STATUS_CODES.UNAUTHORIZED,
+    });
+  }
+
+  if (!paths && !tags) {
+    console.error(`Precondition Failed: Missing paths and tags`);
+    return new Response(`Precondition Failed: Missing paths and tags`, {
+      status: STATUS_CODES.PRECONDITION_FAILED,
+    });
+  }
+
+  let revalidatePaths: string[] = [];
+  let correctTags: string[] = [];
+
+  if (paths) {
+    revalidatePaths = paths.filter(path => path.startsWith("/"));
+
+    console.log("Filtered correct paths:", revalidatePaths);
+  }
+
+  if (tags) {
+    correctTags = tags.filter(tag => typeof tag === "string");
+    console.log("Filtered correct tags:", correctTags);
   }
 
   try {
-    const body = await request.json();
-    const {
-      type,
-      path,
-      tag,
-      tagSlug,
-      tagSlugs,
-    }: {
-      type?: string;
-      path?: string;
-      tag?: string;
-      tagSlug?: string;
-      tagSlugs?: string[];
-    } = body;
-
-    // パスベースのリアバリデーション
-    if (path) {
-      revalidatePath(path, "page");
-      console.log(`Revalidated path: ${path}`);
-    }
-
-    // タグベースのリアバリデーション
-    if (tag) {
-      revalidateTag(tag, "");
-      console.log(`Revalidated tag: ${tag}`);
-    }
-
-    // 型に応じたリアバリデーション
-    if (type === "post") {
-      revalidatePath("/blog", "page");
-      revalidatePath("/blog/[slug]", "page");
-      revalidatePath("/", "page");
-      revalidateTag("posts", "");
-      // 検索ドキュメントのキャッシュも同時に無効化
-      revalidateTag("search-index", "");
-      // 投稿に紐づくタグ詳細ページも再検証（任意で tagSlugs を渡す）
-      if (Array.isArray(tagSlugs)) {
-        for (const slug of tagSlugs) {
-          if (typeof slug === "string" && slug.length > 0) {
-            revalidatePath(`/tags/${slug}`, "page");
-          }
-        }
-      }
-    } else if (type === "tag") {
-      revalidatePath("/tags", "page");
-      revalidatePath("/blog", "page");
-      revalidateTag("tags", "");
-      // 単一のタグ詳細ページが更新された場合（tagSlug を渡す）
-      if (typeof tagSlug === "string" && tagSlug.length > 0) {
-        revalidatePath(`/tags/${tagSlug}`, "page");
-      }
-    }
-
-    return NextResponse.json({
-      revalidated: true,
-      message: "Cache revalidated successfully",
-      timestamp: new Date().toISOString(),
+    revalidatePaths.forEach(path => {
+      revalidatePath(path);
     });
-  } catch (error) {
-    console.error("Revalidation error:", error);
-    return NextResponse.json(
-      {
-        error: "Error revalidating cache",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
+
+    correctTags.forEach(tag => {
+      revalidateTag(tag, "");
+    });
+
+    console.log(
+      `${new Date().toJSON()} - Paths and tags revalidated: ${revalidatePaths.join(
+        ", "
+      )} and ${correctTags.join(", ")}`
     );
+
+    return new Response(
+      JSON.stringify({
+        revalidated: true,
+        message: `Paths and tags revalidated: ${revalidatePaths.join(
+          ", "
+        )} and ${correctTags.join(", ")}`,
+      }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } catch (err: unknown) {
+    let message: string;
+
+    if (err instanceof Error) {
+      message = err.message;
+    } else {
+      message = "An error occurred";
+    }
+    console.error("Revalidation error:", message);
+    return new Response(message, {
+      status: STATUS_CODES.INTERNAL_SERVER_ERROR,
+    });
   }
 }
