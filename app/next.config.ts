@@ -9,6 +9,15 @@ const nextConfig: NextConfig = {
         hostname: "portfolio.ftcare-i.com",
         pathname: "/wp-content/**",
       },
+      {
+        protocol: "https",
+        hostname: "github.com",
+        pathname: "/*.png",
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+      },
     ],
   },
 };

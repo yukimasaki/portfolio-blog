@@ -14,6 +14,9 @@ export {
 export { GlassCard } from "./glass-card";
 export type { GlassCardProps } from "./glass-card";
 
+export { Badge, badgeVariants } from "./badge";
+export type { BadgeProps } from "./badge";
+
 export { Dialog } from "./dialog";
 export { DropdownMenu } from "./dropdown-menu";
 export { Input } from "./input";
