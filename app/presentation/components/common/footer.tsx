@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/presentation/utils";
+import { PROFILE } from "@/shared/constants/profile";
 
 /**
  * フッターコンポーネント
@@ -17,8 +18,9 @@ export function Footer() {
     >
       <div className="container px-4 py-8 md:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center gap-4 text-center text-sm text-muted-foreground">
-          <p>© {currentYear} Portfolio Blog. All rights reserved.</p>
-          <p className="text-xs">Built with Next.js, React, and TypeScript</p>
+          <p>
+            © {currentYear} {PROFILE.name}. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
