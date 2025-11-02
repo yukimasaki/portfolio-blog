@@ -59,10 +59,10 @@ export default function HomePage() {
 
 ---
 
-## フェーズ9.2: 最新記事5件の表示実装
+## フェーズ9.2: 最新記事3件の表示実装
 
 ### 目的
-最新記事5件を表示する機能の実装
+最新記事3件を表示する機能の実装
 
 ### 実装内容
 - 最新記事の取得
@@ -130,7 +130,7 @@ export const RecentPosts = () => {
 ```
 
 ### 完了条件
-- [ ] 最新記事5件が表示される
+- [ ] 最新記事3件が表示される
 - [ ] 記事カードが正常に表示
 - [ ] リンクが正常に動作
 - [ ] 型チェックエラーが0件
@@ -174,7 +174,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 最新記事5件 */}
+      {/* 最新記事3件 */}
       <RecentPosts />
     </main>
   );
@@ -188,7 +188,7 @@ import { PostCard } from '@/presentation/components/blog/post-card';
 import Link from 'next/link';
 
 export async function RecentPosts() {
-  // 最新5件を取得
+  // 最新3件を取得
   const result = await getPosts()();
   
   if (result._tag === 'left') {
@@ -196,7 +196,7 @@ export async function RecentPosts() {
     return null;
   }
 
-  const posts = result.right.slice(0, 5);
+  const posts = result.right.slice(0, 3);
 
   if (posts.length === 0) {
     return null;
@@ -224,7 +224,7 @@ export async function RecentPosts() {
 ### On-Demand Revalidation APIとの連携
 
 フェーズ2.7で実装した `/api/revalidate` エンドポイントが、以下の場合にトップページを再生成します：
-- `type: 'post'` が送信された場合: `/` が再生成され、最新記事5件が更新される
+- `type: 'post'` が送信された場合: `/` が再生成され、最新記事3件が更新される
 
 ### 完了条件
 - ✅ トップページでISRが有効化
