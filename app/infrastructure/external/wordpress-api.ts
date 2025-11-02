@@ -35,7 +35,10 @@ export const getWordPressPosts = async (
   );
 
   const result = pipe(
-    await httpClient.get<WordPressPost[]>(url),
+    await httpClient.get<WordPressPost[]>(url, {
+      // fetchキャッシュにタグを付与し、オンデマンドISRで無効化できるようにする
+      next: { tags: ["posts"] },
+    }),
     E.map(response => response.data),
     E.mapLeft(
       (httpError: HttpError): WordPressApiError => ({
@@ -90,7 +93,10 @@ export const getWordPressPostsByTagId = async (
   );
 
   const result = pipe(
-    await httpClient.get<WordPressPost[]>(url),
+    await httpClient.get<WordPressPost[]>(url, {
+      // fetchキャッシュにタグを付与し、オンデマンドISRで無効化できるようにする
+      next: { tags: ["posts"] },
+    }),
     E.map(response => response.data),
     E.mapLeft(
       (httpError: HttpError): WordPressApiError => ({
@@ -130,7 +136,10 @@ export const getWordPressPostBySlug = async (
   const url = joinUrl(baseUrl, `/wp-json/wp/v2/posts?slug=${slug}&_embed=true`);
 
   const result = pipe(
-    await httpClient.get<WordPressPost[]>(url),
+    await httpClient.get<WordPressPost[]>(url, {
+      // fetchキャッシュにタグを付与し、オンデマンドISRで無効化できるようにする
+      next: { tags: ["posts"] },
+    }),
     E.map(response => response.data),
     E.chain(posts => {
       if (posts.length === 0) {
