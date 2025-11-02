@@ -77,7 +77,7 @@
 
 ### 完了条件
 - [ ] UIコンポーネントのテストが実装済み
-- [✅] カスタムフックのテストが実装済み（useLocalStorage完了、他は未実装）
+- [✅] カスタムフックのテストが実装済み（useLocalStorage, useIntersection, useSearchDocuments, useTheme完了）
 - [ ] Zustandストアのテストが実装済み
 
 ---
