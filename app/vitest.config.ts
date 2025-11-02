@@ -12,5 +12,20 @@ export default defineConfig({
     globals: true,
     environment: "node",
     include: ["**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json", "html"],
+      reportsDirectory: "./coverage",
+      exclude: [
+        "**/*.config.{js,mjs,ts}",
+        "**/*.d.ts",
+        "**/node_modules/**",
+        "**/__tests__/**",
+        "**/__mocks__/**",
+        "coverage/**",
+        "**/.next/**",
+        "**/dist/**",
+      ],
+    },
   },
 });

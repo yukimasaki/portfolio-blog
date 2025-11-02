@@ -17,6 +17,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "test": "vitest",
     "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "type-check": "node scripts/check-env.js && tsc --noEmit",
     "env:report": "node -e \"const names=['WORDPRESS_URL','NEXT_PUBLIC_SITE_URL','NEXT_PUBLIC_SITE_NAME','DEBUG_WORDPRESS_API']; const present=names.map(n=>[n,process.env[n]!==undefined]); console.log('[env] report (build scope expected):'); for(const [k,set] of present){ console.log(' -', k, set ? '[set]' : '[missing]'); } const extra=Object.keys(process.env).filter(k=>k.startsWith('NEXT_PUBLIC_')&&!names.includes(k)); if(extra.length){ console.log('[env] extra NEXT_PUBLIC_* keys:', extra.sort().join(', ')); } else { console.log('[env] extra NEXT_PUBLIC_* keys: (none)'); }\""
   },
@@ -59,6 +60,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^4.0.6",
     "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.0.0",
