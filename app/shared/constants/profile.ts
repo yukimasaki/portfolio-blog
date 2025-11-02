@@ -69,54 +69,92 @@ export interface Profile {
 
 /**
  * プロフィール情報のデフォルト値
- * 実際の値は後で更新してください
+ * 本プロジェクトの概要と技術スタックを反映
  */
 export const PROFILE: Profile = {
   name: "Yuki Masaki",
   title: "Webアプリケーションエンジニア",
-  tagline: "技術とデザインで価値を創造する",
+  tagline: "関数型プログラミングとクリーンアーキテクチャで価値を創造する",
   avatarUrl: undefined,
   socials: [
     { label: "GitHub", url: "https://github.com/ftsmasaki", icon: "github" },
   ],
   summary: [
-    "関数型プログラミングとクリーンアーキテクチャを重視した開発",
-    "保守性とテスタビリティの高いコードベースの構築",
-    "モダンなUI/UXを提供するWebアプリケーション開発",
+    "WordPress REST APIをCMSとして活用したポートフォリオブログサイトの構築",
+    "関数型ドメインモデリングとクリーンアーキテクチャによる保守性の高いコードベース",
+    "bulletproof-react準拠の機能別ディレクトリ構造",
+    "グラスモーフィズムとTailwind CSS 4によるモダンなUI/UXの実現",
   ],
   principles: [
-    "関数型プログラミングによる純粋関数の使用",
-    "クリーンアーキテクチャによるレイヤー分離",
-    "bulletproof-reactによる機能別ディレクトリ構造",
-    "型安全性を重視したTypeScript開発",
-    "テスト可能な設計の徹底",
+    "関数型ドメインモデリングによる純粋関数の活用",
+    "クリーンアーキテクチャによるレイヤー分離（domain, application, infrastructure, presentation, shared）",
+    "bulletproof-react準拠の機能別ディレクトリ構造",
+    "型安全性を重視したTypeScript開発（any型禁止、厳格な型チェック）",
+    "段階的実装とユーザー確認による品質保証",
+    "テスト可能な設計の徹底（Vitest + Testing Library）",
   ],
   stacks: {
-    languages: ["TypeScript", "JavaScript", "Python"],
+    languages: ["TypeScript", "JavaScript"],
     frontend: [
-      "Next.js",
-      "React",
-      "Tailwind CSS",
+      "Next.js 16",
+      "React 19",
+      "Tailwind CSS 4",
       "shadcn/ui",
+      "Radix UI",
       "framer-motion",
+      "TanStack Query",
+      "Zustand",
+      "fp-ts",
+      "lucide-react",
     ],
-    backend: ["Node.js", "Hono", "Next.js API Routes"],
+    backend: ["Next.js API Routes", "Hono", "Node.js"],
     infra: ["Vercel", "GitHub Actions"],
-    test: ["Vitest", "Testing Library"],
-    tools: ["ESLint", "Prettier", "Git", "Docker"],
-    learning: ["Rust", "Go"],
+    test: ["Vitest 4", "Vite 6", "Testing Library"],
+    tools: [
+      "ESLint 9",
+      "eslint-config-next",
+      "Prettier",
+      "tsyringe",
+      "zod",
+      "flexsearch",
+      "date-fns",
+      "rehype ecosystem",
+      "shiki",
+      "next-themes",
+      "@next/third-parties (GA4)",
+    ],
   },
   interests: {
-    now: ["関数型ドメインモデリング", "クリーンアーキテクチャ", "TypeScript"],
-    next: ["RustでのWebアプリケーション開発", "パフォーマンス最適化"],
-    later: ["分散システム", "マイクロサービスアーキテクチャ"],
+    now: [
+      "関数型ドメインモデリングの実践",
+      "クリーンアーキテクチャによるレイヤー分離",
+      "Next.js 16とReact 19の新機能活用",
+      "Tailwind CSS 4によるデザインシステム構築",
+    ],
+    next: [
+      "WordPress REST APIとの統合最適化",
+      "パフォーマンス最適化（Core Web Vitals）",
+      "アクセシビリティの向上",
+    ],
+    later: [
+      "On-Demand ISRによるレンダリング速度の向上",
+      "SSGOIによるアニメーションの実装",
+    ],
   },
   highlights: [
     {
       title: "ポートフォリオブログサイト",
       description:
-        "関数型プログラミングとクリーンアーキテクチャを採用したNext.jsベースのポートフォリオブログサイト",
-      tags: ["Next.js", "TypeScript", "React", "Tailwind CSS"],
+        "WordPress REST APIをCMSとして活用し、関数型ドメインモデリングとクリーンアーキテクチャを採用したNext.js 16 + React 19ベースのポートフォリオブログサイト。グラスモーフィズムデザインとTailwind CSS 4によるモダンなUI/UXを実現。",
+      tags: [
+        "Next.js 16",
+        "React 19",
+        "TypeScript",
+        "Tailwind CSS 4",
+        "WordPress REST API",
+        "クリーンアーキテクチャ",
+        "関数型プログラミング",
+      ],
       link: {
         href: "/blog",
         label: "ブログを見る",
@@ -126,29 +164,41 @@ export const PROFILE: Profile = {
   workStyle: {
     can: [
       "Webアプリケーション開発（フロントエンド・バックエンド）",
-      "関数型プログラミングによる設計",
-      "型安全なコードベースの構築",
+      "関数型プログラミングとクリーンアーキテクチャによる設計",
+      "型安全なコードベースの構築（TypeScript厳格モード）",
+      "WordPress REST APIとの統合",
+      "モダンなUI/UX実装（グラスモーフィズム、レスポンシブデザイン）",
     ],
     preferred: [
       "要件定義から設計、実装まで一貫して担当",
+      "段階的実装とユーザー確認による品質保証",
       "コードレビューとペアプログラミング",
       "技術的負債の削減とリファクタリング",
+      "テスト駆動開発（TDD）の実践",
     ],
   },
   faq: [
     {
-      q: "どのような技術スタックを推奨しますか？",
-      a: "型安全性を重視し、保守性の高いコードベースを構築するため、TypeScriptと関数型プログラミングを推奨します。",
+      q: "どのようなアーキテクチャを採用していますか？",
+      a: "関数型ドメインモデリングとクリーンアーキテクチャを採用し、レイヤー分離（domain, application, infrastructure, presentation, shared）を徹底しています。これにより保守性とテスタビリティの高いコードベースを実現しています。",
+    },
+    {
+      q: "CMSとしてWordPressを選んだ理由は？",
+      a: "WordPress REST APIをCMSとして活用することで、コンテンツ管理の柔軟性を確保しながら、Next.jsによる高速なSSR/SSGの恩恵を受けられるためです。",
     },
     {
       q: "プロジェクトの相談はできますか？",
-      a: "はい、お気軽にご連絡ください。SNSまたはメールでお問い合わせいただけます。",
+      a: "はい、お気軽にご連絡ください。GitHubまたはSNSでお問い合わせいただけます。",
     },
   ],
   cta: {
     primary: {
       label: "ブログを読む",
       href: "/blog",
+    },
+    secondary: {
+      label: "Aboutを見る",
+      href: "/about",
     },
   },
 } as const;
