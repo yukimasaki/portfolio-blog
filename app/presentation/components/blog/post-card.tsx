@@ -95,7 +95,12 @@ export const PostCard = ({ post }: PostCardProps) => {
               transition={{ layout: { duration: 0.2, ease: "easeOut" } }}
             >
               {post.tags.length > 0 ? (
-                <TagList tags={post.tags} showCount={false} link={false} />
+                <TagList
+                  tags={post.tags}
+                  showCount={false}
+                  link={false}
+                  filterByCount={false}
+                />
               ) : null}
             </motion.div>
           </CardHeader>

@@ -86,6 +86,7 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
               title={undefined}
               link={true}
               showCount={false}
+              filterByCount={false}
             />
           </motion.div>
         )}

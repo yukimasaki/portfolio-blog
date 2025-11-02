@@ -7,6 +7,7 @@ interface TagListProps {
   readonly className?: string;
   readonly showCount?: boolean;
   readonly link?: boolean;
+  readonly filterByCount?: boolean;
 }
 
 export const TagList = ({
@@ -15,9 +16,12 @@ export const TagList = ({
   className,
   showCount = true,
   link = true,
+  filterByCount = true,
 }: TagListProps) => {
-  // 投稿数が0のタグを除外
-  const tagsWithPosts = tags.filter(tag => tag.count.value > 0);
+  // 投稿数が0のタグを除外（filterByCountがfalseの場合は除外しない）
+  const tagsWithPosts = filterByCount
+    ? tags.filter(tag => tag.count.value > 0)
+    : tags;
 
   if (tagsWithPosts.length === 0) {
     return (
