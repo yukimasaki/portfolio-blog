@@ -3,12 +3,12 @@
 ## 概要（背景・目的）
 
 ### 背景
-現在、プロジェクトは完全なSSR（Server-Side Rendering）でビルドされており、Azure Static Web Appsがコールドスタートするため表示に10秒ほど掛かることがあり、パフォーマンスが悪い状態です。
+現在、プロジェクトは完全なSSR（Server-Side Rendering）でビルドされており、初回表示が遅延する可能性があります。SSG（Static Site Generation）とISR（Incremental Static Regeneration）を活用することで、パフォーマンスを向上させることができます。
 
 ### 目的
 - **初回ビルド**: SSG（Static Site Generation）でビルド＆デプロイ
 - **以後の更新**: オンデマンドISR（Incremental Static Regeneration）で記事やタグの変更・追加に対応
-- Azure Static Web Appsのコールドスタート問題を解消し、初回表示を高速化
+- 初回表示を高速化し、パフォーマンスを向上させる
 
 ### 既存活用
 - WordPress REST API連携（既存）
@@ -376,7 +376,7 @@ export async function generateStaticParams() {
 
 ### 環境変数
 - `.env.local` に `REVALIDATE_SECRET_KEY` を追加
-- 本番環境（Azure Static Web Apps）でも同じ環境変数を設定する必要がある
+- 本番環境（Vercel）でも同じ環境変数を設定する必要がある
 
 ---
 
@@ -390,7 +390,7 @@ export async function generateStaticParams() {
 - ✅ リントエラーが0件
 
 ### パフォーマンス指標
-- ✅ 初回表示時間が10秒以内（Azure Static Web Appsのコールドスタート問題の解消）
+- ✅ 初回表示時間が大幅に短縮される（SSGによる事前生成）
 - ✅ 静的ページの配信が高速（CDN経由）
 
 ### 機能指標
@@ -431,9 +431,9 @@ export async function generateStaticParams() {
 
 ## 注意事項
 
-### Azure Static Web Appsでの動作
+### Vercelでの動作
 
-Azure Static Web Appsは静的サイトホスティングサービスですが、Next.jsのAPI Routesもサポートしています。`/api/revalidate` はAPI Routesとして動作するため、Azure Static Web Apps上で正常に動作します。
+VercelはNext.jsのネイティブサポートを提供しており、SSG、ISR、API Routesを完全にサポートしています。`/api/revalidate` はAPI Routesとして動作するため、Vercel上で正常に動作します。
 
 ### ビルド時のデータ取得
 
@@ -441,15 +441,15 @@ Azure Static Web Appsは静的サイトホスティングサービスですが�
 
 ### 環境変数の設定
 
-本番環境（Azure Static Web Apps）では、環境変数 `REVALIDATE_SECRET_KEY` を設定する必要があります。
+本番環境（Vercel）では、環境変数 `REVALIDATE_SECRET_KEY` を設定する必要があります。
 
 **開発環境（.env.local）**:
 ```env
 REVALIDATE_SECRET_KEY=your-secret-token-here
 ```
 
-**本番環境（Azure Static Web Apps）**:
-- Azure PortalのStatic Web Apps設定から環境変数を追加
+**本番環境（Vercel）**:
+- Vercelダッシュボードの「Settings」→「Environment Variables」から環境変数を追加
 - WordPressプラグイン側の設定でも同じ値を `Authorization: Bearer` ヘッダーに使用
 
 ### WordPressプラグイン設定
@@ -518,4 +518,4 @@ WordPress管理画面で「On-demand revalidation」プラグインを設定し�
 - [Next.js公式ドキュメント: Data Fetching, Caching, and Revalidating](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating)
 - [Next.js公式ドキュメント: On-Demand Revalidation](https://nextjs.org/docs/app/api-reference/functions/revalidatePath)
 - [Next.js公式ドキュメント: generateStaticParams](https://nextjs.org/docs/app/api-reference/functions/generate-static-params)
-- [Azure Static Web Apps: Next.js サポート](https://learn.microsoft.com/ja-jp/azure/static-web-apps/nextjs)
+- [Vercel: Next.js ドキュメント](https://vercel.com/docs/frameworks/nextjs)
