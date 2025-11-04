@@ -5,8 +5,8 @@ import type { Tag } from "@/domain/tags/entities";
 import { TagList } from "@/presentation/components/common/tag-list";
 import { debugDomainEntity } from "@/infrastructure/utils/debug";
 
-// SSR設定: 常に動的に取得
-export const dynamic = "force-dynamic";
+// ISR設定: 1時間ごとに再生成
+export const revalidate = 3600;
 
 export const metadata = {
   title: "ブログ",

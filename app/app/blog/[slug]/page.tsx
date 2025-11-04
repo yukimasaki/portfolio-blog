@@ -14,8 +14,28 @@ import { Toc } from "@/presentation/components/common/toc";
 import * as React from "react";
 import { publicEnv } from "@/config/env";
 
-// SSR設定: 常に動的に取得
-export const dynamic = "force-dynamic";
+// ISR設定: 1時間ごとに再生成
+export const revalidate = 3600;
+
+// ビルド時に全記事のスラッグを取得
+export async function generateStaticParams() {
+  try {
+    const { getPosts } = await import("@/application/di/usecases");
+    const result = await getPosts()();
+    
+    if (result._tag === "Left") {
+      console.error("Failed to fetch posts for generateStaticParams:", result.left);
+      return [];
+    }
+    
+    return result.right.map((post) => ({
+      slug: post.slug.value,
+    }));
+  } catch (error) {
+    console.error("Error in generateStaticParams:", error);
+    return [];
+  }
+}
 
 interface PageProps {
   params: Promise<{

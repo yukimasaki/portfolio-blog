@@ -3,8 +3,8 @@ import { TagList } from "@/presentation/components/common/tag-list";
 import { getTags } from "@/application/di/usecases";
 import type { Tag } from "@/domain/tags/entities";
 
-// SSR設定: 常に動的に取得
-export const dynamic = "force-dynamic";
+// ISR設定: 2時間ごとに再生成
+export const revalidate = 7200;
 
 export const metadata = {
   title: "タグ一覧",

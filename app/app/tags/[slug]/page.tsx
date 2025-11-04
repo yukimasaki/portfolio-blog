@@ -8,8 +8,28 @@ import type { Post } from "@/domain/blog/entities";
 import type { Tag } from "@/domain/tags/entities";
 import { PostList } from "@/presentation/components/blog/post-list";
 
-// SSR設定: 常に動的に取得
-export const dynamic = "force-dynamic";
+// ISR設定: 1時間ごとに再生成
+export const revalidate = 3600;
+
+// ビルド時に全タグのスラッグを取得
+export async function generateStaticParams() {
+  try {
+    const { getTags } = await import("@/application/di/usecases");
+    const result = await getTags()();
+    
+    if (result._tag === "Left") {
+      console.error("Failed to fetch tags for generateStaticParams:", result.left);
+      return [];
+    }
+    
+    return result.right.map((tag) => ({
+      slug: tag.slug.value,
+    }));
+  } catch (error) {
+    console.error("Error in generateStaticParams:", error);
+    return [];
+  }
+}
 
 interface PageProps {
   readonly params: Promise<{ slug: string }>;

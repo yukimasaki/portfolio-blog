@@ -5,6 +5,8 @@ dev:
 	cd app && yarn dev
 build:
 	cd app && yarn build
+start:
+	cd app && yarn start
 test:
 	cd app && yarn test
 type:
