@@ -35,13 +35,34 @@ export async function PUT(request: NextRequest) {
   console.log("Received paths:", paths);
   console.log("Received tags:", tags);
 
-  const authorizationHeader = request.headers.get("authorization");
+  // Authorizationヘッダーを取得（大文字小文字を考慮）
+  const authorizationHeader =
+    request.headers.get("authorization") ||
+    request.headers.get("Authorization");
 
-  console.log("Authorization header:", authorizationHeader);
+  console.log("Authorization header received:", authorizationHeader);
+  console.log("Expected token:", serverEnv.REVALIDATE_SECRET_KEY);
+  console.log(
+    "Expected full header:",
+    `Bearer ${serverEnv.REVALIDATE_SECRET_KEY}`
+  );
+
+  // 環境変数が設定されているか確認
+  if (!serverEnv.REVALIDATE_SECRET_KEY) {
+    console.error("REVALIDATE_SECRET_KEY is not set in environment variables");
+    return new Response(`Server configuration error`, {
+      status: STATUS_CODES.INTERNAL_SERVER_ERROR,
+    });
+  }
 
   // 認証: Bearer トークンの検証
-  if (authorizationHeader !== `Bearer ${serverEnv.REVALIDATE_SECRET_KEY}`) {
-    console.error(`Invalid token: ${authorizationHeader}`);
+  const expectedHeader = `Bearer ${serverEnv.REVALIDATE_SECRET_KEY}`;
+  if (authorizationHeader !== expectedHeader) {
+    console.error(`Token mismatch:`);
+    console.error(`  Received: "${authorizationHeader}"`);
+    console.error(`  Expected: "${expectedHeader}"`);
+    console.error(`  Length received: ${authorizationHeader?.length ?? 0}`);
+    console.error(`  Length expected: ${expectedHeader.length}`);
     return new Response(`Invalid token`, {
       status: STATUS_CODES.UNAUTHORIZED,
     });
