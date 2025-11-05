@@ -212,17 +212,48 @@ export const getWordPressTagBySlug = async (
   baseUrl: string,
   slug: string
 ): Promise<E.Either<WordPressApiError, WordPressTag>> => {
-  // スラッグをエンコード（日本語対応）
+  // WordPress REST APIはスラッグパラメータを自動的にデコードして検索するため、
+  // エンコードされた形式と日本語のままの形式の両方を試す
+  // まず、エンコードされた形式で試す（WordPress側のスラッグがパーセントエンコード済みの場合）
   const encodedSlug = encodeURIComponent(slug);
-  const url = joinUrl(baseUrl, `/wp-json/wp/v2/tags?slug=${encodedSlug}`);
+  const encodedUrl = joinUrl(
+    baseUrl,
+    `/wp-json/wp/v2/tags?slug=${encodedSlug}`
+  );
 
   // デバッグ: API呼び出し時のスラッグを確認
   console.log("[getWordPressTagBySlug] Original slug:", slug);
   console.log("[getWordPressTagBySlug] Encoded slug:", encodedSlug);
-  console.log("[getWordPressTagBySlug] API URL:", url);
+  console.log("[getWordPressTagBySlug] Encoded API URL:", encodedUrl);
+
+  // エンコードされた形式で試す
+  const encodedResult = await pipe(
+    await httpClient.get<WordPressTag[]>(encodedUrl, {
+      next: { tags: ["tags"] },
+    }),
+    E.map(response => response.data),
+    E.mapLeft(
+      (httpError: HttpError): WordPressApiError => ({
+        message: httpError.message,
+        status: httpError.status,
+      })
+    )
+  );
+
+  // エンコードされた形式で見つかった場合
+  if (E.isRight(encodedResult)) {
+    const tags = encodedResult.right;
+    if (tags.length > 0) {
+      return E.right(tags[0]);
+    }
+  }
+
+  // エンコードされた形式で見つからなかった場合、日本語のままの形式で試す
+  const rawUrl = joinUrl(baseUrl, `/wp-json/wp/v2/tags?slug=${slug}`);
+  console.log("[getWordPressTagBySlug] Raw API URL:", rawUrl);
 
   return pipe(
-    await httpClient.get<WordPressTag[]>(url, {
+    await httpClient.get<WordPressTag[]>(rawUrl, {
       next: { tags: ["tags"] },
     }),
     E.map(response => response.data),
