@@ -99,8 +99,9 @@ export async function PUT(request: NextRequest) {
     });
 
     // タグの無効化
+    // Webhookからのリクエストのため、即座に無効化する必要がある
     correctTags.forEach(tag => {
-      revalidateTag(tag, "");
+      revalidateTag(tag, { expire: 0 });
     });
 
     console.log(
