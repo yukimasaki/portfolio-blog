@@ -16,13 +16,17 @@ export async function generateStaticParams() {
   try {
     const { getTags } = await import("@/application/di/usecases");
     const result = await getTags()();
-    
+
     if (result._tag === "Left") {
-      console.error("Failed to fetch tags for generateStaticParams:", result.left);
+      console.error(
+        "Failed to fetch tags for generateStaticParams:",
+        result.left
+      );
       return [];
     }
-    
-    return result.right.map((tag) => ({
+
+    // Next.jsは自動的にエンコード/デコードを処理するため、元のスラッグを返す
+    return result.right.map(tag => ({
       slug: tag.slug.value,
     }));
   } catch (error) {
@@ -41,6 +45,10 @@ export default async function TagDetailPage({ params }: PageProps) {
   if (!slugParam || typeof slugParam !== "string") {
     return notFound();
   }
+
+  // デバッグ: 受け取ったスラッグを確認
+  console.log("[TagDetailPage] Received slug:", slugParam);
+  console.log("[TagDetailPage] Encoded slug:", encodeURIComponent(slugParam));
 
   const tagResult = await getTagBySlug(slugParam)();
   if (tagResult._tag === "Left") {

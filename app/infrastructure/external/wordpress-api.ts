@@ -212,10 +212,14 @@ export const getWordPressTagBySlug = async (
   baseUrl: string,
   slug: string
 ): Promise<E.Either<WordPressApiError, WordPressTag>> => {
-  const url = joinUrl(
-    baseUrl,
-    `/wp-json/wp/v2/tags?slug=${encodeURIComponent(slug)}`
-  );
+  // スラッグをエンコード（日本語対応）
+  const encodedSlug = encodeURIComponent(slug);
+  const url = joinUrl(baseUrl, `/wp-json/wp/v2/tags?slug=${encodedSlug}`);
+
+  // デバッグ: API呼び出し時のスラッグを確認
+  console.log("[getWordPressTagBySlug] Original slug:", slug);
+  console.log("[getWordPressTagBySlug] Encoded slug:", encodedSlug);
+  console.log("[getWordPressTagBySlug] API URL:", url);
 
   return pipe(
     await httpClient.get<WordPressTag[]>(url, {
