@@ -23,6 +23,14 @@ export interface HttpError {
 }
 
 /**
+ * Next.jsのキャッシュタグオプション
+ */
+export interface NextCacheOptions {
+  tags?: string[];
+  revalidate?: number | false;
+}
+
+/**
  * HTTPクライアント関数
  * fetchのラッパーとして実装し、Either型でエラーハンドリングを行う
  */
@@ -30,12 +38,12 @@ export const httpClient = {
   /**
    * GETリクエストを送信
    * @param url - リクエストURL
-   * @param options - fetchオプション
+   * @param options - fetchオプション（Next.jsのキャッシュタグを含む）
    * @returns Either<HttpError, HttpResponse<T>>
    */
   get: async <T>(
     url: string,
-    options?: RequestInit & { timeoutMs?: number }
+    options?: RequestInit & { timeoutMs?: number; next?: NextCacheOptions }
   ): Promise<E.Either<HttpError, HttpResponse<T>>> => {
     return await tryCatch(
       async () => {
@@ -44,10 +52,14 @@ export const httpClient = {
           options?.timeoutMs ?? DEFAULT_WORDPRESS_FETCH_TIMEOUT_MS;
         const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
+        // Next.jsのキャッシュオプションを抽出
+        const { next, timeoutMs: _, ...fetchOptions } = options || {};
+
         const response = await fetch(url, {
           method: "GET",
           signal: controller.signal,
-          ...options,
+          ...(next ? { next } : {}),
+          ...fetchOptions,
         });
 
         clearTimeout(timeoutId);

@@ -35,7 +35,9 @@ export const getWordPressPosts = async (
   );
 
   const result = pipe(
-    await httpClient.get<WordPressPost[]>(url),
+    await httpClient.get<WordPressPost[]>(url, {
+      next: { tags: ["posts"] },
+    }),
     E.map(response => response.data),
     E.mapLeft(
       (httpError: HttpError): WordPressApiError => ({
@@ -90,7 +92,9 @@ export const getWordPressPostsByTagId = async (
   );
 
   const result = pipe(
-    await httpClient.get<WordPressPost[]>(url),
+    await httpClient.get<WordPressPost[]>(url, {
+      next: { tags: ["posts", "tags"] },
+    }),
     E.map(response => response.data),
     E.mapLeft(
       (httpError: HttpError): WordPressApiError => ({
@@ -130,7 +134,9 @@ export const getWordPressPostBySlug = async (
   const url = joinUrl(baseUrl, `/wp-json/wp/v2/posts?slug=${slug}&_embed=true`);
 
   const result = pipe(
-    await httpClient.get<WordPressPost[]>(url),
+    await httpClient.get<WordPressPost[]>(url, {
+      next: { tags: ["posts"] },
+    }),
     E.map(response => response.data),
     E.chain(posts => {
       if (posts.length === 0) {
@@ -182,7 +188,9 @@ export const getWordPressTags = async (
   );
 
   return pipe(
-    await httpClient.get<WordPressTag[]>(url),
+    await httpClient.get<WordPressTag[]>(url, {
+      next: { tags: ["tags"] },
+    }),
     E.map(response => response.data),
     E.mapLeft(
       (httpError: HttpError): WordPressApiError => ({
@@ -210,7 +218,9 @@ export const getWordPressTagBySlug = async (
   );
 
   return pipe(
-    await httpClient.get<WordPressTag[]>(url),
+    await httpClient.get<WordPressTag[]>(url, {
+      next: { tags: ["tags"] },
+    }),
     E.map(response => response.data),
     E.chain(tags => {
       if (tags.length === 0) {
