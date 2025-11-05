@@ -46,10 +46,6 @@ export default async function TagDetailPage({ params }: PageProps) {
     return notFound();
   }
 
-  // デバッグ: 受け取ったスラッグを確認
-  console.log("[TagDetailPage] Received slug:", slugParam);
-  console.log("[TagDetailPage] Encoded slug:", encodeURIComponent(slugParam));
-
   const tagResult = await getTagBySlug(slugParam)();
   if (tagResult._tag === "Left") {
     if (tagResult.left._tag === "NetworkError") {

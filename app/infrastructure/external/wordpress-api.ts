@@ -221,11 +221,6 @@ export const getWordPressTagBySlug = async (
     `/wp-json/wp/v2/tags?slug=${encodedSlug}`
   );
 
-  // デバッグ: API呼び出し時のスラッグを確認
-  console.log("[getWordPressTagBySlug] Original slug:", slug);
-  console.log("[getWordPressTagBySlug] Encoded slug:", encodedSlug);
-  console.log("[getWordPressTagBySlug] Encoded API URL:", encodedUrl);
-
   // エンコードされた形式で試す
   const encodedResult = await pipe(
     await httpClient.get<WordPressTag[]>(encodedUrl, {
@@ -250,7 +245,6 @@ export const getWordPressTagBySlug = async (
 
   // エンコードされた形式で見つからなかった場合、日本語のままの形式で試す
   const rawUrl = joinUrl(baseUrl, `/wp-json/wp/v2/tags?slug=${slug}`);
-  console.log("[getWordPressTagBySlug] Raw API URL:", rawUrl);
 
   return pipe(
     await httpClient.get<WordPressTag[]>(rawUrl, {
