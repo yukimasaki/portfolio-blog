@@ -1,1 +1,8 @@
 __sample__
+# dotdirs からシンボリックリンクで管理されているファイルを除外
+# このセクションは setup.sh で自動生成されました
+.cursor/commands/test-coverage.md
+.cursor/commands/quality-check.md
+.cursor/commands/commit-message.md
+.cursor/rules/common/documents/implementation-plan.mdc
+.cursor/rules/common/documents/change-log.mdc
